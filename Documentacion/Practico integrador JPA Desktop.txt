@@ -1,18 +1,18 @@
 Practico integrador JPA Desktop.
 
 
-Una empresa de venta por catálogo, de productos de belleza, desea realizar un software que le permita mantener un catálogo virtual entre la empresa y los vendedores con las siguientes pautas:
+Una empresa de venta por catï¿½logo, de productos de belleza, desea realizar un software que le permita mantener un catï¿½logo virtual entre la empresa y los vendedores con las siguientes pautas:
 
- La empresa tiene que poder  cargar los productos y el stock que mantiene de cada uno. 
+La empresa tiene que poder  cargar los productos y el stock que mantiene de cada uno. 
  
-Los vendedores deben poder ver los productos y cargar órdenes.   
+Los vendedores deben poder ver los productos y cargar ï¿½rdenes.   
 
-Los productos tienen: título, descripción, stock y foto. La foto del producto debe estar en un directorio definido por el programador, no se requiere un formularia para cargarla.
+Los productos tienen: tï¿½tulo, descripciï¿½n, stock y foto. La foto del producto debe estar en un directorio definido por el programador, no se requiere un formularia para cargarla.
 
-El administrador de la empresa debe poder cargar productos al catálogo y el vendedor debe  poder navegar el catalogo pero no modificarlo.
+El administrador de la empresa debe poder cargar productos al catï¿½logo y el vendedor debe  poder navegar el catalogo pero no modificarlo.
 
-Las órdenes tienen, código, código de usuario, nombre del comprador, dirección del comprador, listado de productos comprados y cantidades.
+Las ï¿½rdenes tienen, cï¿½digo, cï¿½digo de usuario, nombre del comprador, direcciï¿½n del comprador, listado de productos comprados y cantidades.
 
-Un vendedor tiene que poder cargar órdenes y el administrador de la empresa debe poder verlas.
+Un vendedor tiene que poder cargar ï¿½rdenes y el administrador de la empresa debe poder verlas.
 
-La aplicación debe tener un control de usuarios, el administrador de la empresa es el encargado de mantener el listado de vendedores y sus claves.
+La aplicaciï¿½n debe tener un control de usuarios, el administrador de la empresa es el encargado de mantener el listado de vendedores y sus claves.
