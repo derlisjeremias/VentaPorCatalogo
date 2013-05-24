@@ -1,18 +1,18 @@
 Practico integrador JPA Desktop.
 
 
-Una empresa de venta por cat�logo, de productos de belleza, desea realizar un software que le permita mantener un cat�logo virtual entre la empresa y los vendedores con las siguientes pautas:
+Una empresa de venta por catálogo, de productos de belleza, desea realizar un software que le permita mantener un catálogo virtual entre la empresa y los vendedores con las siguientes pautas:
 
 La empresa tiene que poder  cargar los productos y el stock que mantiene de cada uno. 
  
-Los vendedores deben poder ver los productos y cargar �rdenes.   
+Los vendedores deben poder ver los productos y cargar órdenes.   
 
-Los productos tienen: t�tulo, descripci�n, stock y foto. La foto del producto debe estar en un directorio definido por el programador, no se requiere un formularia para cargarla.
+Los productos tienen: título, descripción, stock y foto. La foto del producto debe estar en un directorio definido por el programador, no se requiere un formularia para cargarla.
 
-El administrador de la empresa debe poder cargar productos al cat�logo y el vendedor debe  poder navegar el catalogo pero no modificarlo.
+El administrador de la empresa debe poder cargar productos al catálogo y el vendedor debe  poder navegar el catálogo pero no modificarlo.
 
-Las �rdenes tienen, c�digo, c�digo de usuario, nombre del comprador, direcci�n del comprador, listado de productos comprados y cantidades.
+Las órdenes tienen, código, código de usuario, nombre del comprador, dirección del comprador, listado de productos comprados y cantidades.
 
-Un vendedor tiene que poder cargar �rdenes y el administrador de la empresa debe poder verlas.
+Un vendedor tiene que poder cargar órdenes y el administrador de la empresa debe poder verlas.
 
-La aplicaci�n debe tener un control de usuarios, el administrador de la empresa es el encargado de mantener el listado de vendedores y sus claves.
+La aplicación debe tener un control de usuarios, el administrador de la empresa es el encargado de mantener el listado de vendedores y sus claves.
