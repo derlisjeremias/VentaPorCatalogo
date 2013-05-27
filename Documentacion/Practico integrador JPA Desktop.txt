@@ -1,18 +1,18 @@
 Practico integrador JPA Desktop.
 
 
-Una empresa de venta por cat醠ogo, de productos de belleza, desea realizar un software que le permita mantener un cat醠ogo virtual entre la empresa y los vendedores con las siguientes pautas:
+Una empresa de venta por cat谩logo, de productos de belleza, desea realizar un software que le permita mantener un cat谩logo virtual entre la empresa y los vendedores con las siguientes pautas:
 
- La empresa tiene que poder  cargar los productos y el stock que mantiene de cada uno. 
+La empresa tiene que poder  cargar los productos y el stock que mantiene de cada uno. 
  
-Los vendedores deben poder ver los productos y cargar 髍denes.   
+Los vendedores deben poder ver los productos y cargar 贸rdenes.   
 
-Los productos tienen: t韙ulo, descripci髇, stock y foto. La foto del producto debe estar en un directorio definido por el programador, no se requiere un formularia para cargarla.
+Los productos tienen: t铆tulo, descripci贸n, stock y foto. La foto del producto debe estar en un directorio definido por el programador, no se requiere un formularia para cargarla.
 
-El administrador de la empresa debe poder cargar productos al cat醠ogo y el vendedor debe  poder navegar el catalogo pero no modificarlo.
+El administrador de la empresa debe poder cargar productos al cat谩logo y el vendedor debe  poder navegar el cat谩logo pero no modificarlo.
 
-Las 髍denes tienen, c骴igo, c骴igo de usuario, nombre del comprador, direcci髇 del comprador, listado de productos comprados y cantidades.
+Las 贸rdenes tienen, c贸digo, c贸digo de usuario, nombre del comprador, direcci贸n del comprador, listado de productos comprados y cantidades.
 
-Un vendedor tiene que poder cargar 髍denes y el administrador de la empresa debe poder verlas.
+Un vendedor tiene que poder cargar 贸rdenes y el administrador de la empresa debe poder verlas.
 
-La aplicaci髇 debe tener un control de usuarios, el administrador de la empresa es el encargado de mantener el listado de vendedores y sus claves.
+La aplicaci贸n debe tener un control de usuarios, el administrador de la empresa es el encargado de mantener el listado de vendedores y sus claves.
