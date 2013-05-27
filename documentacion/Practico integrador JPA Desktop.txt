@@ -1,0 +1,18 @@
+Practico integrador JPA Desktop.
+
+
+Una empresa de venta por catálogo, de productos de belleza, desea realizar un software que le permita mantener un catálogo virtual entre la empresa y los vendedores con las siguientes pautas:
+
+ La empresa tiene que poder  cargar los productos y el stock que mantiene de cada uno. 
+ 
+Los vendedores deben poder ver los productos y cargar órdenes.   
+
+Los productos tienen: título, descripción, stock y foto. La foto del producto debe estar en un directorio definido por el programador, no se requiere un formularia para cargarla.
+
+El administrador de la empresa debe poder cargar productos al catálogo y el vendedor debe  poder navegar el catalogo pero no modificarlo.
+
+Las órdenes tienen, código, código de usuario, nombre del comprador, dirección del comprador, listado de productos comprados y cantidades.
+
+Un vendedor tiene que poder cargar órdenes y el administrador de la empresa debe poder verlas.
+
+La aplicación debe tener un control de usuarios, el administrador de la empresa es el encargado de mantener el listado de vendedores y sus claves.
