@@ -4,14 +4,14 @@
  */
 package ventaporcatalogo;
 
-import ventaporcatalogo.modelo.Categoria;
+import ventaporcatalogo.modelo.catalogo.Categoria;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.StringTokenizer;
 import javax.swing.tree.TreeNode;
-import ventaporcatalogo.modelo.ItemCatalogo;
-import ventaporcatalogo.modelo.Producto;
+import ventaporcatalogo.modelo.catalogo.ItemCatalogo;
+import ventaporcatalogo.modelo.catalogo.Producto;
 
 /**
  *

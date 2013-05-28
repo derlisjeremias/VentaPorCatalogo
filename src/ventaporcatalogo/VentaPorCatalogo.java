@@ -4,6 +4,8 @@
  */
 package ventaporcatalogo;
 
+import ventaporcatalogo.modelo.catalogo.Producto;
+import ventaporcatalogo.modelo.catalogo.Categoria;
 import ventaporcatalogo.modelo.ordencompra.OrdenCompra;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;

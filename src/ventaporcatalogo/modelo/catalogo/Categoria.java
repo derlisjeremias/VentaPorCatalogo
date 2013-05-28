@@ -1,22 +1,39 @@
-package ventaporcatalogo.modelo;
+package ventaporcatalogo.modelo.catalogo;
 
-import ventaporcatalogo.modelo.recorridocatalogo.EstrategiaRecorrido;
+import java.io.Serializable;
 import java.util.*;
-import ventaporcatalogo.modelo.recorridocatalogo.RecorridoAnchura;
+import javax.persistence.*;
 
 /**
  *
  * @author Jere
  */
-public class Categoria extends ItemCatalogo {
+@Entity
+public class Categoria extends ItemCatalogo implements Serializable {
 
+    @Id
+    @GeneratedValue
+    private Long id;
+    @OneToMany(cascade = CascadeType.ALL)
     private List<ItemCatalogo> items;
+    @OneToOne
     private EstrategiaRecorrido recorrido;
+
+    public Categoria() {
+    }
 
     public Categoria(String n) {
         this.nombre = n;
         this.items = new ArrayList();
         this.recorrido = new RecorridoAnchura();
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public List<ItemCatalogo> getItems() {
@@ -42,16 +59,20 @@ public class Categoria extends ItemCatalogo {
         return "Categoría: " + this.nombre;
     }
 
-    public void agregarCategoria(Categoria c) {
+    public boolean agregarCategoria(Categoria c) {
         if (!this.existeCategoria(c)) {
             this.agregarItemCatalogo(c);
+            return true;
         }
+        return false;
     }
 
-    public void agregarItemCatalogo(ItemCatalogo ic) {
+    public boolean agregarItemCatalogo(ItemCatalogo ic) {
         if (!this.tieneItem(ic)) {
             this.items.add(ic);
+            return true;
         }
+        return false;
     }
 
     public boolean tieneItem(ItemCatalogo ic) {
@@ -63,20 +84,22 @@ public class Categoria extends ItemCatalogo {
         return this.recorrido.existeCategoria(this, c);
     }
 
-    public void agregarProducto(Producto p) {
-        this.agregarItemCatalogo(p);
+    public boolean agregarProducto(Producto p) {
+        return this.agregarItemCatalogo(p);
     }
 
     @Override
-    public void eliminarCategoria(Categoria c) {
-        this.recorrido.eliminarCategoria(this, c);
+    public boolean eliminarCategoria(Categoria c) {
+        return this.recorrido.eliminarCategoria(this, c);
     }
 
-    public void eliminarCategoriaDeItems(Categoria c) {
+    public boolean eliminarCategoriaDeItems(Categoria c) {
         this.items.remove(c);
+        return true;
     }
 
-    public void eliminarProducto(Producto p) {
+    public boolean eliminarProducto(Producto p) {
         this.items.remove(p);
+        return true;
     }
 }

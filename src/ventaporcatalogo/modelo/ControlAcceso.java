@@ -49,8 +49,8 @@ public class ControlAcceso {
         return (this.sesionActiva() && this.usuarioActivo.permitidoHacerPedidos());
     }
 
-    public void agregarOrdenCompra(OrdenCompra oc) {
-        this.usuarioActivo.agregarOrdenCompra(oc);
+    public boolean agregarOrdenCompra(OrdenCompra oc) {
+        return this.usuarioActivo.agregarOrdenCompra(oc);
     }
 
     public List<OrdenCompra> obtenerOrdenesCompra() {

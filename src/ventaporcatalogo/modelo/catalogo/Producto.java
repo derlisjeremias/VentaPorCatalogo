@@ -1,16 +1,23 @@
-package ventaporcatalogo.modelo;
+package ventaporcatalogo.modelo.catalogo;
 
 import java.awt.Image;
+import java.io.Serializable;
+import javax.persistence.*;
 
 /**
  *
  * @author Jere
  */
-public class Producto extends ItemCatalogo {
+@Entity
+public class Producto extends ItemCatalogo implements Serializable {
 
+    @Id
+    @GeneratedValue
+    private Long id;
     private String codigo;
     private String descripcion;
     private int stock;
+    @OneToOne
     private Image imagen;
 
     public String getCodigo() {
@@ -66,7 +73,7 @@ public class Producto extends ItemCatalogo {
     }
 
     @Override
-    public void eliminarCategoria(Categoria c) {
-        // Es producto, no posee categorias
+    public boolean eliminarCategoria(Categoria c) {
+        return false;
     }
 }

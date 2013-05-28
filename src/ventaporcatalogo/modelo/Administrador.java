@@ -1,13 +1,28 @@
 package ventaporcatalogo.modelo;
 
+import java.io.Serializable;
 import ventaporcatalogo.modelo.ordencompra.OrdenCompra;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.*;
 
-public class Administrador extends Cargo {
+@Entity
+public class Administrador extends Cargo implements Serializable {
+
+    @Id
+    @GeneratedValue
+    private Long id;
 
     public Administrador() {
         this.nombre = "Administrador";
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     @Override
@@ -26,8 +41,8 @@ public class Administrador extends Cargo {
     }
 
     @Override
-    public void agregarOrdenCompra(OrdenCompra oc) {
-        //
+    public boolean agregarOrdenCompra(OrdenCompra oc) {
+        return false;
     }
 
     @Override

@@ -1,21 +1,36 @@
 package ventaporcatalogo.modelo;
 
+import java.io.Serializable;
 import ventaporcatalogo.modelo.ordencompra.OrdenCompra;
-import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.*;
 
 /**
  *
  * @author Jere
  */
-public class Usuario {
+@Entity
+public class Usuario implements Serializable {
 
+    @Id
+    @GeneratedValue
+    private Long id;
     private String codigo;
     private String nombre;
+    @OneToOne(cascade = CascadeType.ALL)
     private Cargo cargo;
+    @ManyToOne
     private Empresa empresa;
 
     public Usuario() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getCodigo() {
@@ -39,6 +54,7 @@ public class Usuario {
     }
 
     public void setCargo(Cargo cargo) {
+        cargo.setUsuario(this);
         this.cargo = cargo;
     }
 
@@ -78,10 +94,11 @@ public class Usuario {
         return this.cargo.permitidoHacerPedidos();
     }
 
-    public void agregarOrdenCompra(OrdenCompra oc) {
-        if (this.codigo.equals(oc.getCodigoUsuario())){
-            this.cargo.agregarOrdenCompra(oc);
+    public boolean agregarOrdenCompra(OrdenCompra oc) {
+        if (this.codigo.equals(oc.getCodigoUsuario())) {
+           return this.cargo.agregarOrdenCompra(oc);
         }
+        return false;
     }
 
     public List<OrdenCompra> obtenerOrdenesCompra() {

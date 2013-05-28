@@ -1,17 +1,35 @@
 package ventaporcatalogo.modelo.ordencompra;
 
-import ventaporcatalogo.modelo.Producto;
+import java.io.Serializable;
+import javax.persistence.*;
+import ventaporcatalogo.modelo.catalogo.Producto;
 
 /**
  *
  * @author Jere
  */
-public class EstadoEditable implements EstadoOrdenCompra {
+@Entity
+public class EstadoEditable implements EstadoOrdenCompra, Serializable {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+    @OneToOne(mappedBy = "estado")
     private OrdenCompra oc;
+
+    public EstadoEditable() {
+    }
 
     public EstadoEditable(OrdenCompra oc) {
         this.oc = oc;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     @Override

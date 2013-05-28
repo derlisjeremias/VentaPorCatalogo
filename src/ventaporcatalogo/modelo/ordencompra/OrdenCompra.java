@@ -1,25 +1,38 @@
 package ventaporcatalogo.modelo.ordencompra;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.persistence.*;
 import ventaporcatalogo.modelo.Articulo;
-import ventaporcatalogo.modelo.Producto;
+import ventaporcatalogo.modelo.catalogo.Producto;
 import ventaporcatalogo.modelo.Usuario;
+import ventaporcatalogo.modelo.Vendedor;
 
 /**
  *
  * @author Jere
  */
-public class OrdenCompra {
+@Entity
+public class OrdenCompra implements Serializable {
 
+    @Id
+    @GeneratedValue
+    private Long id;
     private String codigo;
     private String codigoUsuario;
     private String nombreComprador;
     private String direccionComprador;
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Articulo> articulos;
+    @OneToOne(cascade = CascadeType.ALL)
     private EstadoOrdenCompra estado;
-    private Usuario usuario;
+    @ManyToOne
+    private Vendedor vendedor;
+
+    public OrdenCompra() {
+    }
 
     public OrdenCompra(Usuario u) {
         this.codigo = this.generarCodigo();
@@ -28,7 +41,7 @@ public class OrdenCompra {
         this.direccionComprador = new String();
         this.articulos = new ArrayList();
         this.estado = new EstadoEditable(this);
-        this.usuario = u;
+        this.vendedor = (Vendedor) u.getCargo();
     }
 
     private String generarCodigo() {
@@ -36,6 +49,14 @@ public class OrdenCompra {
         long hora = fecha.getTime();
         String codigo = Long.toString(hora);
         return codigo;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getCodigo() {

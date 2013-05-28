@@ -1,8 +1,8 @@
-package ventaporcatalogo.modelo.recorridocatalogo;
+package ventaporcatalogo.modelo.catalogo;
 
 import java.util.Stack;
-import ventaporcatalogo.modelo.Categoria;
-import ventaporcatalogo.modelo.ItemCatalogo;
+import ventaporcatalogo.modelo.catalogo.Categoria;
+import ventaporcatalogo.modelo.catalogo.ItemCatalogo;
 
 /**
  *
@@ -30,7 +30,7 @@ public class RecorridoProfundidad extends EstrategiaRecorrido {
     }
 
     @Override
-    public void eliminarCategoria(Categoria padre, Categoria objetivo) {
+    public boolean eliminarCategoria(Categoria padre, Categoria objetivo) {
         Stack<ItemCatalogo> s = new Stack();
         for (ItemCatalogo ic : padre.getItems()) {
             s.push(ic);
@@ -38,11 +38,11 @@ public class RecorridoProfundidad extends EstrategiaRecorrido {
         while (!s.empty()) {
             ItemCatalogo aux = s.pop();
             if (aux.equals(objetivo)) {
-                padre.eliminarCategoriaDeItems(objetivo);
+                return padre.eliminarCategoriaDeItems(objetivo);
             } else {
-                aux.eliminarCategoria(objetivo);
+                return aux.eliminarCategoria(objetivo);
             }
         }
-
+        return false;
     }
 }

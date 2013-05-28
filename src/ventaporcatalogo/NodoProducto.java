@@ -4,7 +4,7 @@
  */
 package ventaporcatalogo;
 
-import ventaporcatalogo.modelo.Producto;
+import ventaporcatalogo.modelo.catalogo.Producto;
 import java.util.Enumeration;
 import javax.swing.tree.TreeNode;
 

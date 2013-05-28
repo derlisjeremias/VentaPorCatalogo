@@ -1,11 +1,18 @@
 package ventaporcatalogo.modelo;
 
+import java.io.Serializable;
 import ventaporcatalogo.modelo.ordencompra.OrdenCompra;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.*;
 
-public class Vendedor extends Cargo {
+@Entity
+public class Vendedor extends Cargo implements Serializable {
 
+    @Id
+    @GeneratedValue
+    private Long id;
+    @OneToMany(mappedBy = "vendedor")
     private List<OrdenCompra> ordenesCompra;
 
     public Vendedor() {
@@ -29,8 +36,9 @@ public class Vendedor extends Cargo {
     }
 
     @Override
-    public void agregarOrdenCompra(OrdenCompra oc) {
+    public boolean agregarOrdenCompra(OrdenCompra oc) {
         this.ordenesCompra.add(oc);
+        return true;
     }
 
     @Override

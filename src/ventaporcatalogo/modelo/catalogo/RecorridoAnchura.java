@@ -1,9 +1,9 @@
-package ventaporcatalogo.modelo.recorridocatalogo;
+package ventaporcatalogo.modelo.catalogo;
 
 import java.util.LinkedList;
 import java.util.Queue;
-import ventaporcatalogo.modelo.Categoria;
-import ventaporcatalogo.modelo.ItemCatalogo;
+import ventaporcatalogo.modelo.catalogo.Categoria;
+import ventaporcatalogo.modelo.catalogo.ItemCatalogo;
 
 /**
  *
@@ -31,7 +31,7 @@ public class RecorridoAnchura extends EstrategiaRecorrido {
     }
 
     @Override
-    public void eliminarCategoria(Categoria padre, Categoria objetivo) {
+    public boolean eliminarCategoria(Categoria padre, Categoria objetivo) {
         Queue<ItemCatalogo> q = new LinkedList();
         for (ItemCatalogo ic : padre.getItems()) {
             q.add(ic);
@@ -39,10 +39,11 @@ public class RecorridoAnchura extends EstrategiaRecorrido {
         while (!q.isEmpty()) {
             ItemCatalogo aux = q.poll();
             if (aux.equals(objetivo)) {
-                padre.eliminarCategoriaDeItems(objetivo);
+                return padre.eliminarCategoriaDeItems(objetivo);
             } else {
-                aux.eliminarCategoria(objetivo);
+                return aux.eliminarCategoria(objetivo);
             }
         }
+        return false;
     }
 }

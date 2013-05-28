@@ -4,8 +4,8 @@
  */
 package ventaporcatalogo;
 
-import ventaporcatalogo.modelo.Categoria;
-import ventaporcatalogo.modelo.Producto;
+import ventaporcatalogo.modelo.catalogo.Categoria;
+import ventaporcatalogo.modelo.catalogo.Producto;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.event.TreeModelEvent;

@@ -1,21 +1,38 @@
 package ventaporcatalogo.modelo;
 
+import ventaporcatalogo.modelo.catalogo.Catalogo;
+import ventaporcatalogo.modelo.catalogo.Producto;
+import ventaporcatalogo.modelo.catalogo.Categoria;
+import java.io.Serializable;
 import ventaporcatalogo.modelo.ordencompra.OrdenCompra;
 import java.util.*;
-import persistencia.Persistencia;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.persistence.*;
+import ventaporcatalogo.persistencia.*;
 
 /**
  *
  * @author Jere
  */
-public class Empresa {
+@Entity
+public class Empresa implements Serializable {
 
+    @Id
+    @GeneratedValue
+    private Long id;
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Producto> productos;
+    @OneToMany(cascade = CascadeType.ALL)
     private List<OrdenCompra> ordenesCompra;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "empresa")
     private List<Usuario> usuarios;
+    @OneToOne(cascade = CascadeType.ALL)
     private Catalogo catalogo;
+    @OneToOne
     private ControlAcceso seguridad;
-    private Persistencia persistencia;
+    @OneToOne
+    private ManejoPersistencia persistencia;
 
     public Empresa() {
         this.productos = new ArrayList();
@@ -23,19 +40,30 @@ public class Empresa {
         this.usuarios = new ArrayList();
         this.catalogo = new Catalogo();
         this.seguridad = new ControlAcceso(this);
-        this.persistencia = new Persistencia();
+        this.persistencia = new ManejoPersistencia();
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public void agregarUsuario(Usuario u) {
         // if (this.permitidoAdministrarUsuarios() && !this.esUsuario(u)) {
         this.usuarios.add(u);
         u.setEmpresa(this);
+        this.persistrirUsuario(u);
+
         //}
     }
 
     public void eliminarUsuario(Usuario u) {
         if (this.permitidoAdministrarUsuarios() && this.esUsuario(u)) {
             this.usuarios.remove(u);
+            this.destruirUsuario(u);
         }
     }
 
@@ -65,20 +93,28 @@ public class Empresa {
 
     public void agregarCategoriaEnRaiz(Categoria c) {
         if (this.seguridad.permitidoAdministrarCatalogo()) {
-            this.catalogo.agregarCategoriaEnRaiz(c);
+            if (this.catalogo.agregarCategoriaEnRaiz(c)) {
+                this.persistirCategoria(c);
+            }
         }
     }
 
     public void agregarCategoriaEnCategoria(Categoria c_hija, Categoria c_padre) {
         if (this.seguridad.permitidoAdministrarCatalogo()) {
-            this.catalogo.agregarCategoriaEnCategoria(c_hija, c_padre);
+            if (this.catalogo.agregarCategoriaEnCategoria(c_hija, c_padre)) {
+                this.modificarCategoria(c_padre);
+                this.persistirCategoria(c_hija);
+            }
         }
     }
 
     public void agregarProductoEnCategoria(Producto p, Categoria c) {
         if (this.seguridad.permitidoAdministrarCatalogo()) {
             if (this.existeProducto(p)) {
-                this.catalogo.agregarProductoEnCategoria(c, p);
+                if (this.catalogo.agregarProductoEnCategoria(c, p)) {
+                    this.modificarCategoria(c);
+                    this.persistirProducto(p);
+                }
             }
         }
     }
@@ -87,6 +123,7 @@ public class Empresa {
         if (this.seguridad.permitidoAdministrarCatalogo()) {
             if (!this.existeProducto(p)) {
                 this.productos.add(p);
+                this.persistirProducto(p);
             }
         }
     }
@@ -96,18 +133,28 @@ public class Empresa {
     }
 
     public void eliminarCategoria(Categoria c) {
-        this.catalogo.eliminarCategoria(c);
+        if (this.catalogo.eliminarCategoria(c)) {
+            this.destruirCategoria(c);
+        }
     }
 
     public void moverCategoriaHaciaCategoria(Categoria origen, Categoria destino, Categoria objetivo) {
         if (this.seguridad.permitidoAdministrarCatalogo()) {
-            this.catalogo.moverCategoriaHaciaCategoria(origen, destino, objetivo);
+            if (this.catalogo.moverCategoriaHaciaCategoria(origen, destino, objetivo)) {
+                this.modificarCategoria(origen);
+                this.modificarCategoria(destino);
+                this.modificarCategoria(objetivo);
+            }
         }
     }
 
     public void moverProductoHaciaCategoria(Categoria origen, Categoria destino, Producto objetivo) {
         if (this.seguridad.permitidoAdministrarCatalogo()) {
-            this.catalogo.moverProductoHaciaCategoria(origen, destino, objetivo);
+            if (this.catalogo.moverProductoHaciaCategoria(origen, destino, objetivo)) {
+                this.modificarCategoria(origen);
+                this.modificarCategoria(destino);
+                this.modificarProducto(objetivo);
+            }
         }
     }
 
@@ -121,19 +168,76 @@ public class Empresa {
 
     public void agregarOrdenCompra(OrdenCompra oc) {
         if (this.seguridad.permitidoHacerPedidos()) {
-            this.seguridad.agregarOrdenCompra(oc);
+            if (this.seguridad.agregarOrdenCompra(oc)) {
+                this.persistirOrdenCompra(oc);
+            }
         }
     }
 
     public List<OrdenCompra> obtenerOrdenesCompraUsuario() {
         if (this.seguridad.permitidoHacerPedidos()) {
             return this.seguridad.obtenerOrdenesCompra();
-        }            
+        }
         return listaVacia();
     }
-    
-    private ArrayList listaVacia(){
+
+    private ArrayList listaVacia() {
         return new ArrayList();
     }
-    
+
+    private void persistrirUsuario(Usuario u) {
+        CtrlPersisUsuario cp = this.persistencia.getCpUsuario();
+        cp.crear(u);
+    }
+
+    private void destruirUsuario(Usuario u) {
+        try {
+            CtrlPersisUsuario cp = this.persistencia.getCpUsuario();
+            cp.destruir(u.getId());
+        } catch (NoExisteEntidadException ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void persistirCategoria(Categoria c) {
+        CtrlPersisCategoria cp = this.persistencia.getCpCategoria();
+        cp.crear(c);
+    }
+
+    private void modificarCategoria(Categoria c) {
+        try {
+            CtrlPersisCategoria cp = this.persistencia.getCpCategoria();
+            cp.editar(c);
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void destruirCategoria(Categoria c) {
+        try {
+            CtrlPersisCategoria cp = this.persistencia.getCpCategoria();
+            cp.destruir(c.getId());
+        } catch (NoExisteEntidadException ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void persistirProducto(Producto p) {
+        CtrlPersisProducto cp = this.persistencia.getCpProducto();
+        cp.crear(p);
+    }
+
+    private void modificarProducto(Producto p) {
+        try {
+            CtrlPersisProducto cp = this.persistencia.getCpProducto();
+            cp.editar(p);
+        } catch (Exception ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void persistirOrdenCompra(OrdenCompra oc) {
+        CtrlPersisOrdenCompra cp = this.persistencia.getCpOrdenCompra();
+        cp.crear(oc);
+    }
 }

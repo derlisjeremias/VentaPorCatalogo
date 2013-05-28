@@ -1,11 +1,13 @@
 package ventaporcatalogo.modelo.ordencompra;
 
-import ventaporcatalogo.modelo.Producto;
+import javax.persistence.*;
+import ventaporcatalogo.modelo.catalogo.Producto;
 
 /**
  *
  * @author Jere
  */
+
 public interface EstadoOrdenCompra {
 
     public void setCodigo(String codigo);
@@ -23,6 +25,4 @@ public interface EstadoOrdenCompra {
     public void abrirOrdenCompra();
 
     public void archivarOrdenCompra();
-
-    public String toString();
 }
