@@ -5,10 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.*;
-import ventaporcatalogo.modelo.Articulo;
-import ventaporcatalogo.modelo.catalogo.Producto;
-import ventaporcatalogo.modelo.Usuario;
-import ventaporcatalogo.modelo.Vendedor;
+import ventaporcatalogo.modelo.*;
 
 /**
  *
@@ -18,7 +15,7 @@ import ventaporcatalogo.modelo.Vendedor;
 public class OrdenCompra implements Serializable {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String codigo;
     private String codigoUsuario;
@@ -26,10 +23,15 @@ public class OrdenCompra implements Serializable {
     private String direccionComprador;
     @OneToMany(cascade = CascadeType.ALL)
     private List<Articulo> articulos;
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     private EstadoOrdenCompra estado;
     @ManyToOne
-    private Vendedor vendedor;
+    @JoinTable(name = "ORDENCOMPRA_USUARIO",
+            joinColumns =
+            @JoinColumn(name = "ORDENCOMPRA_ID"),
+            inverseJoinColumns =
+            @JoinColumn(name = "USUARIO_ID"))
+    private Usuario usuario;
 
     public OrdenCompra() {
     }
@@ -41,14 +43,14 @@ public class OrdenCompra implements Serializable {
         this.direccionComprador = new String();
         this.articulos = new ArrayList();
         this.estado = new EstadoEditable(this);
-        this.vendedor = (Vendedor) u.getCargo();
+        this.usuario = u;
     }
 
     private String generarCodigo() {
         Date fecha = new Date();
         long hora = fecha.getTime();
-        String codigo = Long.toString(hora);
-        return codigo;
+        String c = Long.toString(hora);
+        return c;
     }
 
     public Long getId() {
@@ -64,7 +66,9 @@ public class OrdenCompra implements Serializable {
     }
 
     public void setCodigo(String codigo) {
-        this.estado.setCodigo(codigo);
+        if (this.estado.permiteModicifacion()) {
+            this.codigo = codigo;
+        }
     }
 
     public String getCodigoUsuario() {
@@ -72,7 +76,9 @@ public class OrdenCompra implements Serializable {
     }
 
     public void setCodigoUsuario(String codigoUsuario) {
-        this.estado.setCodigoUsuario(codigoUsuario);
+        if (this.estado.permiteModicifacion()) {
+            this.codigoUsuario = codigoUsuario;
+        }
     }
 
     public String getNombreComprador() {
@@ -80,7 +86,9 @@ public class OrdenCompra implements Serializable {
     }
 
     public void setNombreComprador(String nombreComprador) {
-        this.estado.setNombreComprador(nombreComprador);
+        if (this.estado.permiteModicifacion()) {
+            this.nombreComprador = nombreComprador;
+        }
     }
 
     public String getDireccionComprador() {
@@ -88,28 +96,13 @@ public class OrdenCompra implements Serializable {
     }
 
     public void setDireccionComprador(String direccionComprador) {
-        this.estado.setDireccionComprador(direccionComprador);
-    }
-
-    protected void setCodigo(String c, EstadoEditable e) {
-    }
-
-    protected void setCodigoUsuario(String cu, EstadoOrdenCompra e) {
-        if (e.equals(this.estado)) {
-            this.codigoUsuario = cu;
+        if (this.estado.permiteModicifacion()) {
+            this.direccionComprador = direccionComprador;
         }
     }
 
-    protected void setNombreComprador(String nc, EstadoOrdenCompra e) {
-        if (e.equals(this.estado)) {
-            this.nombreComprador = nc;
-        }
-    }
-
-    protected void setDireccionComprador(String dc, EstadoOrdenCompra e) {
-        if (e.equals(this.estado)) {
-            this.direccionComprador = dc;
-        }
+    public Usuario getUsuario() {
+        return usuario;
     }
 
     public String getTipoEstado() {
@@ -130,32 +123,36 @@ public class OrdenCompra implements Serializable {
     }
 
     private Articulo obtenerArticuloConCodigo(String cod) {
-        Articulo aux = null;
         for (Articulo a : this.articulos) {
             if (a.getCodigo().equals(cod)) {
-                aux = a;
-                break;
+                return a;
             }
         }
-        return aux;
+        return null;
     }
 
-    public void agregarArticulo(Producto p, int cant) {
-        this.estado.agregarArticulo(p, cant);
-    }
-
-    protected void agregarArticulo(Producto p, int cant, EstadoOrdenCompra e) {
-        if (e.equals(this.estado)) {
-            if (!this.existeArticulo(p.getCodigo())) {
-                Articulo a = new Articulo(p, cant);
+    public boolean agregarArticulo(Articulo a) {
+        if (this.estado.permiteModicifacion()) {
+            if (!this.existeArticulo(a.getCodigo())) {
                 this.articulos.add(a);
+                return true;
             } else {
-                Articulo a = this.obtenerArticuloConCodigo(p.getCodigo());
-                int total = a.getCantidad();
-                total += cant;
-                a.setCantidad(total);
+                Articulo articEncontrado = this.obtenerArticuloConCodigo(a.getCodigo());
+                articEncontrado.setCantidad(a.getCantidad() + articEncontrado.getCantidad());
+                return true;
             }
         }
+        return false;
+    }
+
+    public boolean eliminarArticulo(Articulo a) {
+        if (this.estado.permiteModicifacion()) {
+            if (this.existeArticulo(a.getCodigo())) {
+                this.articulos.remove(a);
+                return true;
+            }
+        }
+        return false;
     }
 
     public void cerrarOrdenCompra() {

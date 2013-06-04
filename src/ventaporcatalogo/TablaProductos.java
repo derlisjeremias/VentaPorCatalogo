@@ -7,7 +7,6 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 import ventaporcatalogo.modelo.Empresa;
 import ventaporcatalogo.modelo.catalogo.Producto;
-import ventaporcatalogo.modelo.Usuario;
 
 /**
  *

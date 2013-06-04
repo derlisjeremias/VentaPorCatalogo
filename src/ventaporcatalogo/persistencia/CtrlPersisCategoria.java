@@ -1,4 +1,3 @@
-
 package ventaporcatalogo.persistencia;
 
 import java.io.Serializable;
@@ -15,7 +14,7 @@ import ventaporcatalogo.modelo.catalogo.Categoria;
  *
  * @author Jere
  */
-public class CtrlPersisCategoria implements Serializable{
+public class CtrlPersisCategoria implements Serializable {
 
     private EntityManagerFactory emf = null;
 
@@ -32,6 +31,12 @@ public class CtrlPersisCategoria implements Serializable{
         try {
             em = getEntityManager();
             em.getTransaction().begin();
+            String padre;
+            if (categoria.getPadre() == null) {
+                padre = "null";
+            } else {
+                padre = categoria.getPadre().getId().toString();
+            }
             em.persist(categoria);
             em.getTransaction().commit();
         } finally {
@@ -131,4 +136,3 @@ public class CtrlPersisCategoria implements Serializable{
         }
     }
 }
-

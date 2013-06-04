@@ -25,19 +25,14 @@ public class ArbolCatalogo implements TreeModel {
     private List<TreeModelListener> dependientes;
 
     public ArbolCatalogo() {
-        modelApp = null ;
-        raiz = null;
-        dependientes = new ArrayList();
-
     }
 
     public ArbolCatalogo(Empresa e) {
-        modelApp = e;
-        Categoria d = e.obtenerCategoriaInicio();
-        NodoCategoria r = new NodoCategoria(d);
-        raiz = r;
+        this.modelApp = e;
+        Categoria cr = e.obtenerCategoriaRaiz();
+        NodoCategoria nr = new NodoCategoria(cr);
+        raiz = nr;
         dependientes = new ArrayList();
-
     }
 
     public void setRaiz(NodoCategoria raiz) {
@@ -51,7 +46,6 @@ public class ArbolCatalogo implements TreeModel {
 
     @Override
     public Object getChild(Object parent, int index) {
-        
         NodoCatalogo p = (NodoCatalogo) parent;
         return (NodoCatalogo) p.getChildAt(index);
     }
@@ -79,6 +73,7 @@ public class ArbolCatalogo implements TreeModel {
         if (n.esNodoCategoria()) {
             NodoCategoria nc = (NodoCategoria) n;
             Categoria c = (Categoria) newValue;
+            c.setRecorrido(this.modelApp.obtenerCategoriaRaiz().getRecorrido());
             nc.setCategoria(c);
         }
         TreeModelEvent e = new TreeModelEvent(n, path);
@@ -111,5 +106,9 @@ public class ArbolCatalogo implements TreeModel {
         for (TreeModelListener l : dependientes) {
             l.treeNodesChanged(e);
         }
+    }
+
+    void cargarItems() {
+        
     }
 }

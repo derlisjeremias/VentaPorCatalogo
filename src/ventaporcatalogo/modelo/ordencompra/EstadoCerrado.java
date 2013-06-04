@@ -2,74 +2,36 @@ package ventaporcatalogo.modelo.ordencompra;
 
 import java.io.Serializable;
 import javax.persistence.*;
-import ventaporcatalogo.modelo.catalogo.Producto;
 
 /**
  *
  * @author Jere
  */
 @Entity
-public class EstadoCerrado implements EstadoOrdenCompra, Serializable {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-    @OneToOne(mappedBy = "estado")
-    private OrdenCompra oc;
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorValue("EC")
+public class EstadoCerrado extends EstadoOrdenCompra implements Serializable {
 
     public EstadoCerrado() {
     }
 
     public EstadoCerrado(OrdenCompra oc) {
-        this.oc = oc;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    @Override
-    public void setCodigo(String codigo) {
-        this.estadoCerrado();
-    }
-
-    @Override
-    public void setCodigoUsuario(String codigoUsuario) {
-        this.estadoCerrado();
-    }
-
-    @Override
-    public void setNombreComprador(String nombreComprador) {
-        this.estadoCerrado();
-    }
-
-    @Override
-    public void setDireccionComprador(String direccionComprador) {
-        this.estadoCerrado();
-    }
-
-    @Override
-    public void agregarArticulo(Producto p, int cant) {
-        this.estadoCerrado();
+        this.ordenCompra = oc;
     }
 
     @Override
     public void cerrarOrdenCompra() {
-        this.estadoCerrado();
+        System.out.println("Orden codigo " + ordenCompra.getCodigo() + " en estado cerrado");
     }
 
     @Override
     public void abrirOrdenCompra() {
-        oc.abrir();
+        ordenCompra.abrir();
     }
 
     @Override
     public void archivarOrdenCompra() {
-        oc.archivar();
+        ordenCompra.archivar();
     }
 
     @Override
@@ -77,7 +39,8 @@ public class EstadoCerrado implements EstadoOrdenCompra, Serializable {
         return "[cerrado]";
     }
 
-    private void estadoCerrado() {
-        System.out.println("Orden codigo " + oc.getCodigo() + " en estado cerrado");
+    @Override
+    protected boolean permiteModicifacion() {
+        return false;
     }
 }

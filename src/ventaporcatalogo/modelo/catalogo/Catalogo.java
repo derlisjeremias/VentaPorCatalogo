@@ -1,39 +1,41 @@
 package ventaporcatalogo.modelo.catalogo;
 
-import java.io.Serializable;
-import javax.persistence.*;
+import java.util.List;
+import ventaporcatalogo.persistencia.CtrlPersisCategoria;
+import ventaporcatalogo.persistencia.ManejoPersistencia;
 
 /**
  *
  * @author Jere
  */
-@Entity
-public class Catalogo implements Serializable {
+public class Catalogo {
 
-    @Id
-    @GeneratedValue
-    private Long id;
-    @OneToOne(cascade = CascadeType.ALL)
-    private Categoria categorias;
+    private Categoria categoriaRaiz;
 
     public Catalogo() {
-        this.categorias = new Categoria("Catalogo");
+        this.recuperarRaiz();
     }
 
-    public Long getId() {
-        return id;
-    }
+    private void recuperarRaiz() {
+        ManejoPersistencia persistencia = new ManejoPersistencia();
+        CtrlPersisCategoria cpc = persistencia.getCpCategoria();
+        Long id = new Long(1);
+        this.categoriaRaiz = cpc.encontrarCategoria(id);
 
-    public void setId(Long id) {
-        this.id = id;
+        if (this.categoriaRaiz == null) {
+            Categoria c = new Categoria("Catálogo");
+            cpc.crear(c);
+            this.categoriaRaiz = cpc.encontrarCategoria(id);
+        }
+        this.categoriaRaiz.setRecorrido(new RecorridoAnchura());
     }
 
     public String getNombre() {
-        return this.categorias.getNombre();
+        return this.categoriaRaiz.getNombre();
     }
 
     public boolean agregarCategoriaEnRaiz(Categoria c) {
-        return this.categorias.agregarCategoria(c);
+        return this.categoriaRaiz.agregarCategoria(c);
     }
 
     public boolean agregarCategoriaEnCategoria(Categoria c_hija, Categoria c_padre) {
@@ -44,10 +46,14 @@ public class Catalogo implements Serializable {
     }
 
     public boolean existeCategoria(Categoria c) {
-        return this.categorias.existeCategoria(c);
+        return this.categoriaRaiz.existeCategoria(c);
     }
 
-    public boolean agregarProductoEnCategoria(Categoria c, Producto p) {
+    public boolean existeCategoriaConNombre(String nombre) {
+        return this.categoriaRaiz.existeCategoriaConNombre(nombre);
+    }
+
+    public boolean agregarProductoEnCategoria(Producto p, Categoria c) {
         if (this.existeCategoria(c)) {
             return c.agregarProducto(p);
         }
@@ -55,12 +61,12 @@ public class Catalogo implements Serializable {
     }
 
     public boolean eliminarCategoria(Categoria c) {
-        return this.categorias.eliminarCategoria(c);
+        return this.categoriaRaiz.eliminarCategoria(c);
     }
 
     public boolean moverCategoriaHaciaCategoria(Categoria origen, Categoria destino, Categoria objetivo) {
         if (this.existeCategoria(origen) && this.existeCategoria(destino) && this.existeCategoria(objetivo)) {
-            if (origen.tieneItem(objetivo)) {
+            if (origen.tieneItem(objetivo) && !destino.tieneItem(objetivo)) {
                 return destino.agregarCategoria(objetivo) && origen.eliminarCategoriaDeItems(objetivo);
             }
         }
@@ -69,14 +75,20 @@ public class Catalogo implements Serializable {
 
     public boolean moverProductoHaciaCategoria(Categoria origen, Categoria destino, Producto objetivo) {
         if (this.existeCategoria(origen) && this.existeCategoria(destino)) {
-            if (origen.tieneItem(objetivo)) {
-                return destino.agregarItemCatalogo(objetivo) && origen.eliminarProducto(objetivo);
-            }
+            return destino.agregarProducto(objetivo) && origen.eliminarProductoDeItems(objetivo);
         }
         return false;
     }
 
-    public Categoria obtenerCategoriaInicio() {
-        return this.categorias;
+    public Categoria obtenerCategoriaRaiz() {
+        return this.categoriaRaiz;
+    }
+
+    public Categoria obtenerCategoriaConNombre(String nombre) {
+        return this.categoriaRaiz.obtenerCategoriaConNombre(nombre);
+    }
+
+    public List<Categoria> obtenerCategorias() {
+        return this.categoriaRaiz.obtenerCategorias();
     }
 }

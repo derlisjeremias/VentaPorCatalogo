@@ -1,6 +1,5 @@
 package ventaporcatalogo.modelo.catalogo;
 
-import java.awt.Image;
 import java.io.Serializable;
 import javax.persistence.*;
 
@@ -9,16 +8,17 @@ import javax.persistence.*;
  * @author Jere
  */
 @Entity
+@Table(name = "ITEM_PRODUCTO")
 public class Producto extends ItemCatalogo implements Serializable {
 
-    @Id
-    @GeneratedValue
-    private Long id;
+
     private String codigo;
     private String descripcion;
     private int stock;
-    @OneToOne
-    private Image imagen;
+    private String pathImagen;
+
+    public Producto() {
+    }
 
     public String getCodigo() {
         return codigo;
@@ -44,12 +44,12 @@ public class Producto extends ItemCatalogo implements Serializable {
         this.stock = stock;
     }
 
-    public Image getImagen() {
-        return imagen;
+    public String getPathImagen() {
+        return pathImagen;
     }
 
-    public void setImagen(Image imagen) {
-        this.imagen = imagen;
+    public void setPathImagen(String pathImagen) {
+        this.pathImagen = pathImagen;
     }
 
     @Override
@@ -74,6 +74,11 @@ public class Producto extends ItemCatalogo implements Serializable {
 
     @Override
     public boolean eliminarCategoria(Categoria c) {
+        return false;
+    }
+
+    @Override
+    public boolean existeCategoriaConNombre(String nombre) {
         return false;
     }
 }

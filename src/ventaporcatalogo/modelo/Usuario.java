@@ -13,13 +13,16 @@ import javax.persistence.*;
 public class Usuario implements Serializable {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue//(strategy = GenerationType.AUTO)
     private Long id;
     private String codigo;
     private String nombre;
+    private String claveAcceso;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario")
+    private List<OrdenCompra> ordenesCompra;
     @OneToOne(cascade = CascadeType.ALL)
     private Cargo cargo;
-    @ManyToOne
+    @Transient
     private Empresa empresa;
 
     public Usuario() {
@@ -54,7 +57,7 @@ public class Usuario implements Serializable {
     }
 
     public void setCargo(Cargo cargo) {
-        cargo.setUsuario(this);
+//        cargo.setUsuario(this);
         this.cargo = cargo;
     }
 
@@ -66,15 +69,30 @@ public class Usuario implements Serializable {
         this.empresa = empresa;
     }
 
-    public void asignarClaveAcceso(String c) {
-        this.cargo.asignarClaveAcceso(c);
+    public String getClaveAcceso() {
+        return claveAcceso;
+    }
+
+    public void setClaveAcceso(String claveAcceso) {
+        this.claveAcceso = claveAcceso;
+    }
+
+    public List<OrdenCompra> getOrdenesCompra() {
+        return ordenesCompra;
+    }
+
+    public void setOrdenesCompra(List<OrdenCompra> ordenesCompra) {
+        this.ordenesCompra = ordenesCompra;
     }
 
     public boolean comprobarClave(String c) {
-        return this.cargo.comprobarClave(c);
+        return this.claveAcceso.equals(c);
     }
 
     public boolean esUsuarioDe(Empresa e) {
+        if (this.empresa == null) {
+            return false;
+        }
         return this.empresa.equals(e);
     }
 
@@ -95,13 +113,41 @@ public class Usuario implements Serializable {
     }
 
     public boolean agregarOrdenCompra(OrdenCompra oc) {
-        if (this.codigo.equals(oc.getCodigoUsuario())) {
-           return this.cargo.agregarOrdenCompra(oc);
+        if (this.codigo.equals(oc.getCodigoUsuario()) && !this.existeOrdenCompra(oc)) {
+            this.ordenesCompra.add(oc);
+            return true;
         }
         return false;
     }
 
     public List<OrdenCompra> obtenerOrdenesCompra() {
-        return this.cargo.obtenerOrdenesCompra();
+        return this.ordenesCompra;
+    }
+
+    public boolean agregarArticuloParaOrdenCompra(Articulo articulo, OrdenCompra ordenCompra) {
+        if (this.ordenesCompra.contains(ordenCompra)) {
+            return ordenCompra.agregarArticulo(articulo);
+        }
+        return false;
+    }
+
+    public boolean eliminarArticuloParaOrdenCompra(Articulo articulo, OrdenCompra ordenCompra) {
+        if (this.ordenesCompra.contains(ordenCompra)) {
+            return ordenCompra.eliminarArticulo(articulo);
+        }
+        return false;
+    }
+
+    public void crearOrdenCompra(String nombreComprador, String direccionComprador) {
+        OrdenCompra oc = new OrdenCompra(this);
+        oc.setNombreComprador(nombreComprador);
+        oc.setDireccionComprador(direccionComprador);
+        this.empresa.actualizarUsuario(this);
+        this.empresa.agregarOrdenCompra(oc);
+        this.agregarOrdenCompra(oc);
+    }
+
+    public boolean existeOrdenCompra(OrdenCompra oc) {
+        return this.ordenesCompra.contains(oc);
     }
 }

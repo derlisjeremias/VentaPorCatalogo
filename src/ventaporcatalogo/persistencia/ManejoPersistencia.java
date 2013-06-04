@@ -13,12 +13,7 @@ public class ManejoPersistencia {
     private CtrlPersisAdministrador cpAdministrador = null;
     private CtrlPersisArticulo cpArticulo = null;
     private CtrlPersisCargo cpCargo = null;
-    private CtrlPersisCatalogo cpCatalogo = null;
     private CtrlPersisCategoria cpCategoria = null;
-    private CtrlPersisEmpresa cpEmpresa = null;
-    private CtrlPersisEstadoArchivado cpEstadoArchivado = null;
-    private CtrlPersisEstadoCerrado cpEstadoCerrado = null;
-    private CtrlPersisEstadoEditable cpEstadoEditable = null;
     private CtrlPersisItemCatalogo cpItemCatalogo = null;
     private CtrlPersisOrdenCompra cpOrdenCompra = null;
     private CtrlPersisProducto cpProducto = null;
@@ -30,12 +25,7 @@ public class ManejoPersistencia {
         this.cpAdministrador = new CtrlPersisAdministrador(emf);
         this.cpArticulo = new CtrlPersisArticulo(emf);
         this.cpCargo = new CtrlPersisCargo(emf);
-        this.cpCatalogo = new CtrlPersisCatalogo(emf);
         this.cpCategoria = new CtrlPersisCategoria(emf);
-        this.cpEmpresa = new CtrlPersisEmpresa(emf);
-        this.cpEstadoArchivado = new CtrlPersisEstadoArchivado(emf);
-        this.cpEstadoCerrado = new CtrlPersisEstadoCerrado(emf);
-        this.cpEstadoEditable = new CtrlPersisEstadoEditable(emf);
         this.cpItemCatalogo = new CtrlPersisItemCatalogo(emf);
         this.cpOrdenCompra = new CtrlPersisOrdenCompra(emf);
         this.cpProducto = new CtrlPersisProducto(emf);
@@ -55,28 +45,8 @@ public class ManejoPersistencia {
         return cpCargo;
     }
 
-    public CtrlPersisCatalogo getCpCatalogo() {
-        return cpCatalogo;
-    }
-
     public CtrlPersisCategoria getCpCategoria() {
         return cpCategoria;
-    }
-
-    public CtrlPersisEmpresa getCpEmpresa() {
-        return cpEmpresa;
-    }
-
-    public CtrlPersisEstadoArchivado getCpEstadoArchivado() {
-        return cpEstadoArchivado;
-    }
-
-    public CtrlPersisEstadoCerrado getCpEstadoCerrado() {
-        return cpEstadoCerrado;
-    }
-
-    public CtrlPersisEstadoEditable getCpEstadoEditable() {
-        return cpEstadoEditable;
     }
 
     public CtrlPersisItemCatalogo getCpItemCatalogo() {

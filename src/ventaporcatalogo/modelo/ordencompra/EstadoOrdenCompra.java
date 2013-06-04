@@ -1,28 +1,47 @@
 package ventaporcatalogo.modelo.ordencompra;
 
+import java.io.Serializable;
 import javax.persistence.*;
-import ventaporcatalogo.modelo.catalogo.Producto;
 
 /**
  *
  * @author Jere
  */
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name="TIPO_ESTADO")
+public abstract class EstadoOrdenCompra implements Serializable {
 
-public interface EstadoOrdenCompra {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+    @OneToOne(mappedBy="estado")
+    protected OrdenCompra ordenCompra;
 
-    public void setCodigo(String codigo);
+    public EstadoOrdenCompra() {
+    }
 
-    public void setCodigoUsuario(String codigoUsuario);
+    public Long getId() {
+        return id;
+    }
 
-    public void setNombreComprador(String nombreComprador);
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public void setDireccionComprador(String direccionComprador);
+    public OrdenCompra getOrdenCompra() {
+        return ordenCompra;
+    }
 
-    public void agregarArticulo(Producto p, int cant);
+    public void setOrdenCompra(OrdenCompra ordenCompra) {
+        this.ordenCompra = ordenCompra;
+    }
 
-    public void cerrarOrdenCompra();
+    public abstract void cerrarOrdenCompra();
 
-    public void abrirOrdenCompra();
+    public abstract void abrirOrdenCompra();
 
-    public void archivarOrdenCompra();
+    public abstract void archivarOrdenCompra();
+
+    protected abstract boolean permiteModicifacion();
 }

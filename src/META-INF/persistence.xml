@@ -5,23 +5,21 @@
     <class>ventaporcatalogo.modelo.Administrador</class>
     <class>ventaporcatalogo.modelo.Articulo</class>
     <class>ventaporcatalogo.modelo.Cargo</class>
-    <class>ventaporcatalogo.modelo.Empresa</class>
     <class>ventaporcatalogo.modelo.Usuario</class>
     <class>ventaporcatalogo.modelo.Vendedor</class>
-    <class>ventaporcatalogo.modelo.catalogo.Catalogo</class>
     <class>ventaporcatalogo.modelo.catalogo.Categoria</class>
     <class>ventaporcatalogo.modelo.catalogo.ItemCatalogo</class>
     <class>ventaporcatalogo.modelo.catalogo.Producto</class>
     <class>ventaporcatalogo.modelo.ordencompra.EstadoArchivado</class>
     <class>ventaporcatalogo.modelo.ordencompra.EstadoCerrado</class>
     <class>ventaporcatalogo.modelo.ordencompra.EstadoEditable</class>
+    <class>ventaporcatalogo.modelo.ordencompra.EstadoOrdenCompra</class>
     <class>ventaporcatalogo.modelo.ordencompra.OrdenCompra</class>
     <properties>
-      <property name="javax.persistence.jdbc.url" value="jdbc:derby:VentaPorCatalogo_db;create=true"/>
-      <property name="javax.persistence.jdbc.password" value=""/>
+      <property name="javax.persistence.jdbc.url" value="jdbc:derby:VentaPorCatalogoDB;create=true"/>
+      <property name="javax.persistence.jdbc.password" value="admin"/>
       <property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.EmbeddedDriver"/>
-      <property name="javax.persistence.jdbc.user" value=""/>
-      <property name="eclipselink.ddl-generation" value="create-tables"/>
+      <property name="javax.persistence.jdbc.user" value="admin"/>
     </properties>
   </persistence-unit>
 </persistence>

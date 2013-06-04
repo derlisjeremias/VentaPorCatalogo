@@ -110,7 +110,7 @@ public class TablaOrdenesCompra implements TableModel {
     public void cargarOrdenesCompra() {
         this.limpiarTabla();
         List<OrdenCompra> ordenesCompra;
-        ordenesCompra = this.modelApp.obtenerOrdenesCompraUsuario();
+        ordenesCompra = this.modelApp.obtenerOrdenesCompraDeUsuarioActivo();
         
         for (OrdenCompra oc : ordenesCompra) {
             this.agregarFila();
